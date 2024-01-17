@@ -26,6 +26,7 @@ using libcamera::ColorSpace;
 using libcamera::ControlList;
 using libcamera::FrameBufferAllocator;
 using libcamera::FrameBuffer;
+using libcamera::Orientation;
 using libcamera::PixelFormat;
 using libcamera::Rectangle;
 using libcamera::Request;
@@ -34,7 +35,6 @@ using libcamera::Span;
 using libcamera::Stream;
 using libcamera::StreamRole;
 using libcamera::StreamConfiguration;
-using libcamera::Transform;
 
 namespace controls = libcamera::controls;
 namespace formats = libcamera::formats;
@@ -199,12 +199,12 @@ bool camera_create(const parameters_t *params, camera_frame_cb frame_cb, camera_
         raw_stream_conf.bufferCount = video_stream_conf.bufferCount;
     }
 
-    conf->transform = Transform::Identity;
+    conf->orientation = Orientation::Rotate0;
     if (params->h_flip) {
-        conf->transform = Transform::HFlip * conf->transform;
+        conf->orientation = Orientation::Rotate0Mirror;
     }
     if (params->v_flip) {
-        conf->transform = Transform::VFlip * conf->transform;
+        conf->orientation = Orientation::Rotate180Mirror;
     }
 
     CameraConfiguration::Status vstatus = conf->validate();
